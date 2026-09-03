@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>TOP .5 EXPERIMENT #003</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  background:#03040a;
+  color:white;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+
+.app{
+  width:100%;
+  max-width:520px;
+  min-height:100dvh;
+  margin:auto;
+  padding:16px 14px 40px;
+}
+
+.brand{
+  text-align:center;
+  color:#ffd84d;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:1.5px;
+}
+
+h1{
+  text-align:center;
+  margin:9px 0 5px;
+  font-size:24px;
+}
+
+.question{
+  text-align:center;
+  color:#d7deed;
+  font-size:17px;
+  line-height:1.45;
+  margin-bottom:14px;
+  font-weight:700;
+}
+
+.question strong{
+  color:#fff;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.stat{
+  background:#0c101c;
+  border:1px solid #202942;
+  border-radius:13px;
+  text-align:center;
+  padding:10px 3px;
+}
+
+.stat strong{
+  display:block;
+  color:#ffd84d;
+  font-size:19px;
+  margin-bottom:3px;
+}
+
+.stat span{
+  color:#909bb0;
+  font-size:10px;
+  font-weight:700;
+}
+
+.game-wrap{
+  position:relative;
+  width:100%;
+  height:clamp(330px,52dvh,470px);
+  border-radius:20px;
+  overflow:hidden;
+  border:1px solid #28304b;
+  background:#010208;
+  box-shadow:
+    0 0 35px rgba(0,0,0,.6),
+    inset 0 0 35px rgba(76,47,255,.05);
+}
+
+canvas{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.start-screen{
+  position:absolute;
+  inset:0;
+  z-index:10;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:25px;
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(93,50,255,.18),
+      rgba(1,2,8,.94) 62%
+    );
+}
+
+.start-hole{
+  width:95px;
+  height:95px;
+  border-radius:50%;
+  margin-bottom:20px;
+  background:#000;
+  border:7px solid #9b63ff;
+  box-shadow:
+    0 0 12px #9b63ff,
+    0 0 28px #6535ff,
+    0 0 55px rgba(101,53,255,.7),
+    inset 0 0 15px #000;
+  animation:pulse 1.2s infinite alternate;
+}
+
+@keyframes pulse{
+  from{
+    transform:scale(.92);
+    box-shadow:
+      0 0 10px #9b63ff,
+      0 0 24px #6535ff,
+      0 0 45px rgba(101,53,255,.55);
+  }
+
+  to{
+    transform:scale(1.06);
+    box-shadow:
+      0 0 18px #c99cff,
+      0 0 40px #6535ff,
+      0 0 75px rgba(101,53,255,.9);
+  }
+}
+
+.start-title{
+  font-size:25px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+.start-title span{
+  color:#c79aff;
+}
+
+.start-text{
+  color:#b8c1d2;
+  font-size:15px;
+  line-height:1.55;
+  margin-bottom:22px;
+}
+
+.start-btn{
+  width:86%;
+  max-width:310px;
+  border:0;
+  border-radius:14px;
+  padding:16px;
+  background:#ffd84d;
+  color:#101010;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.timer-box{
+  margin-top:12px;
+}
+
+.timer-row{
+  display:flex;
+  justify-content:space-between;
+  color:#aeb8ca;
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+#timeText{
+  color:#ffd84d;
+  font-weight:900;
+}
+
+.progress{
+  width:100%;
+  height:8px;
+  border-radius:99px;
+  overflow:hidden;
+  background:#171b27;
+}
+
+.progress-bar{
+  width:100%;
+  height:100%;
+  background:#ffd84d;
+}
+
+.live-count{
+  text-align:center;
+  margin-top:10px;
+  font-size:12px;
+  color:#8995a9;
+}
+
+.live-count strong{
+  color:#46b8ff;
+  font-size:15px;
+}
+
+.result{
+  display:none;
+  margin-top:16px;
+  padding:19px;
+  border-radius:18px;
+  text-align:center;
+  background:#0c101c;
+  border:1px solid #27324a;
+}
+
+.result-title{
+  color:#ffd84d;
+  font-size:15px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+.result-big{
+  font-size:35px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+.survived{
+  color:#42e991;
+}
+
+.lost{
+  color:#ff5570;
+}
+
+.result-sub{
+  color:#aeb8ca;
+  font-size:13px;
+  line-height:1.5;
+  margin-bottom:17px;
+}
+
+.grade-btn{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:16px 8px;
+  background:#ffd84d;
+  color:#111;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.restart-btn{
+  width:100%;
+  margin-top:9px;
+  border:1px solid #354159;
+  border-radius:14px;
+  padding:13px;
+  background:#111725;
+  color:#dce4f2;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.legend{
+  display:flex;
+  justify-content:center;
+  gap:17px;
+  margin-top:11px;
+  color:#7e899d;
+  font-size:11px;
+}
+
+.dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  margin-right:4px;
+}
+
+.blue{
+  background:#42b7ff;
+}
+
+.purple{
+  background:#9d67ff;
+}
+
+.red{
+  background:#ff5570;
+}
+
+.footer{
+  text-align:center;
+  color:#505a6c;
+  font-size:10px;
+  margin-top:18px;
+  letter-spacing:.7px;
+}
+
+@media(max-height:700px){
+  .game-wrap{
+    height:330px;
+  }
+
+  .app{
+    padding-top:9px;
+  }
+
+  h1{
+    font-size:21px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="brand">
+    🧪 TOP .5 EXPERIMENT
+  </div>
+
+  <h1>EXPERIMENT #003</h1>
+
+  <div class="question">
+    <strong>100 CREATURES</strong> vs
+    <strong>1 BLACK HOLE</strong>
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <strong>100</strong>
+      <span>CREATURES</span>
+    </div>
+
+    <div class="stat">
+      <strong>1</strong>
+      <span>BLACK HOLE</span>
+    </div>
+
+    <div class="stat">
+      <strong>10</strong>
+      <span>SECONDS</span>
+    </div>
+
+  </div>
+
+  <div class="game-wrap" id="gameWrap">
+
+    <canvas id="canvas"></canvas>
+
+    <div class="start-screen" id="startScreen">
+
+      <div class="start-hole"></div>
+
+      <div class="start-title">
+        HOW MANY <span>SURVIVE?</span>
+      </div>
+
+      <div class="start-text">
+        100 creatures.<br>
+        One black hole.<br>
+        Only 10 seconds.
+      </div>
+
+      <button class="start-btn" id="startBtn">
+        ▶ START EXPERIMENT
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="timer-box">
+
+    <div class="timer-row">
+      <span>TIME LEFT</span>
+      <span id="timeText">10.0s</span>
+    </div>
+
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+  </div>
+
+  <div class="live-count">
+    CREATURES REMAINING:
+    <strong id="remainingCount">100</strong>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot blue"></i>ALIVE</span>
+    <span><i class="dot purple"></i>BLACK HOLE</span>
+    <span><i class="dot red"></i>LOST</span>
+  </div>
+
+  <div class="result" id="result">
+
+    <div class="result-title">
+      🧪 EXPERIMENT COMPLETE
+    </div>
+
+    <div class="result-big">
+      <span class="survived" id="survivedCount">0</span>
+      SURVIVED
+    </div>
+
+    <div class="result-sub">
+      <span class="lost" id="lostCount">0</span>
+      were swallowed by the black hole.
+    </div>
+
+    <button class="grade-btn" id="gradeBtn">
+      🧪 CHECK YOUR EXPERIMENT RANK
+    </button>
+
+    <button class="restart-btn" id="restartBtn">
+      ↻ RUN AGAIN
+    </button>
+
+  </div>
+
+  <div class="footer">
+    TOP .5 EXPERIMENT · #003
+  </div>
+
+</div>
+
+<script>
+
+/* =============================
+   SETTINGS
+============================= */
+
+const CREATURE_COUNT = 100;
+const LIMIT = 10;
+
+/*
+  기존 보상 Shorts.
+  나중에 글로벌용 보상 영상이 생기면
+  이 주소만 바꾸면 됨.
+*/
+
+const YOUTUBE_URL =
+"https://youtube.com/shorts/68GRplRRDRQ";
+
+/* =============================
+   ELEMENTS
+============================= */
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+const gameWrap =
+document.getElementById("gameWrap");
+
+const startScreen =
+document.getElementById("startScreen");
+
+const startBtn =
+document.getElementById("startBtn");
+
+const restartBtn =
+document.getElementById("restartBtn");
+
+const gradeBtn =
+document.getElementById("gradeBtn");
+
+const timeText =
+document.getElementById("timeText");
+
+const progressBar =
+document.getElementById("progressBar");
+
+const remainingCount =
+document.getElementById("remainingCount");
+
+const result =
+document.getElementById("result");
+
+const survivedCount =
+document.getElementById("survivedCount");
+
+const lostCount =
+document.getElementById("lostCount");
+
+/* =============================
+   VARIABLES
+============================= */
+
+let W = 0;
+let H = 0;
+
+let creatures = [];
+let particles = [];
+
+let running = false;
+
+let startTime = 0;
+let lastTime = 0;
+
+let animationId = null;
+
+let blackHole = {
+  x:0,
+  y:0,
+  radius:25,
+  angle:0
+};
+
+/* =============================
+   HELPERS
+============================= */
+
+function random(min,max){
+  return Math.random() *
+  (max-min) + min;
+}
+
+function distance(ax,ay,bx,by){
+
+  const dx = bx-ax;
+  const dy = by-ay;
+
+  return Math.sqrt(
+    dx*dx + dy*dy
+  );
+}
+
+/* =============================
+   RESIZE
+============================= */
+
+function resizeCanvas(){
+
+  const rect =
+  gameWrap.getBoundingClientRect();
+
+  const dpr =
+  Math.min(
+    window.devicePixelRatio || 1,
+    2
+  );
+
+  W = rect.width;
+  H = rect.height;
+
+  canvas.width =
+  Math.round(W*dpr);
+
+  canvas.height =
+  Math.round(H*dpr);
+
+  canvas.style.width =
+  W+"px";
+
+  canvas.style.height =
+  H+"px";
+
+  ctx.setTransform(
+    dpr,0,0,dpr,0,0
+  );
+
+  blackHole.x = W/2;
+  blackHole.y = H/2;
+}
+
+/* =============================
+   CREATURE
+============================= */
+
+function createCreature(){
+
+  let x;
+  let y;
+
+  /*
+    처음부터 블랙홀 너무 가까이에
+    생성되지 않게 함.
+  */
+
+  do{
+
+    x = random(18,W-18);
+    y = random(18,H-18);
+
+  }while(
+    distance(
+      x,y,
+      W/2,H/2
+    ) < 95
+  );
+
+  const angle =
+  random(0,Math.PI*2);
+
+  const speed =
+  random(18,43);
+
+  return{
+
+    x:x,
+    y:y,
+
+    vx:
+    Math.cos(angle)*speed,
+
+    vy:
+    Math.sin(angle)*speed,
+
+    radius:
+    random(2.7,4.2),
+
+    alive:true,
+
+    orbit:
+    random(.75,1.25)
+
+  };
+}
+
+/* =============================
+   PARTICLES
+============================= */
+
+function createDeathParticles(c){
+
+  for(let i=0;i<5;i++){
+
+    particles.push({
+
+      x:c.x,
+      y:c.y,
+
+      vx:random(-35,35),
+      vy:random(-35,35),
+
+      life:1,
+
+      size:random(1,2.5)
+
+    });
+  }
+}
+
+function updateParticles(dt){
+
+  for(const p of particles){
+
+    p.x += p.vx*dt;
+    p.y += p.vy*dt;
+
+    p.life -= dt*2.3;
+  }
+
+  particles =
+  particles.filter(
+    p=>p.life>0
+  );
+}
+
+/* =============================
+   RESET
+============================= */
+
+function resetGame(){
+
+  if(animationId){
+    cancelAnimationFrame(animationId);
+  }
+
+  running = false;
+
+  lastTime = 0;
+
+  result.style.display =
+  "none";
+
+  startScreen.style.display =
+  "flex";
+
+  progressBar.style.width =
+  "100%";
+
+  timeText.textContent =
+  "10.0s";
+
+  remainingCount.textContent =
+  CREATURE_COUNT;
+
+  particles = [];
+  creatures = [];
+
+  for(
+    let i=0;
+    i<CREATURE_COUNT;
+    i++
+  ){
+
+    creatures.push(
+      createCreature()
+    );
+  }
+
+  draw();
+}
+
+/* =============================
+   START
+============================= */
+
+function startGame(){
+
+  resetGame();
+
+  startScreen.style.display =
+  "none";
+
+  running = true;
+
+  startTime =
+  performance.now();
+
+  lastTime =
+  startTime;
+
+  animationId =
+  requestAnimationFrame(loop);
+}
+
+/* =============================
+   CREATURE PHYSICS
+============================= */
+
+function updateCreature(c,dt){
+
+  if(!c.alive) return;
+
+  const dx =
+  blackHole.x-c.x;
+
+  const dy =
+  blackHole.y-c.y;
+
+  const dist =
+  Math.sqrt(
+    dx*dx + dy*dy
+  ) || 1;
+
+  /*
+    블랙홀 중력.
+    가까워질수록 강해짐.
+  */
+
+  let gravity =
+  9500 /
+  Math.max(
+    dist*dist,
+    1000
+  );
+
+  gravity *=
+  c.orbit;
+
+  /*
+    중심 방향 힘
+  */
+
+  c.vx +=
+  (dx/dist) *
+  gravity *
+  28 *
+  dt;
+
+  c.vy +=
+  (dy/dist) *
+  gravity *
+  28 *
+  dt;
+
+  /*
+    회전 방향 힘을 추가해서
+    곧장 떨어지지 않고 소용돌이침
+  */
+
+  const swirl =
+  19 /
+  Math.max(
+    dist/60,
+    .7
+  );
+
+  c.vx +=
+  (-dy/dist) *
+  swirl *
+  dt;
+
+  c.vy +=
+  (dx/dist) *
+  swirl *
+  dt;
+
+  /*
+    생명체가 약간 도망치려는 움직임
+  */
+
+  c.vx +=
+  random(-13,13)*dt;
+
+  c.vy +=
+  random(-13,13)*dt;
+
+  /*
+    속도 제한
+  */
+
+  const speed =
+  Math.sqrt(
+    c.vx*c.vx +
+    c.vy*c.vy
+  );
+
+  const maxSpeed = 105;
+
+  if(speed > maxSpeed){
+
+    c.vx =
+    c.vx/speed*maxSpeed;
+
+    c.vy =
+    c.vy/speed*maxSpeed;
+  }
+
+  c.x += c.vx*dt;
+  c.y += c.vy*dt;
+
+  /*
+    화면 벽에서 튕김
+  */
+
+  if(c.x<c.radius){
+
+    c.x=c.radius;
+    c.vx=Math.abs(c.vx);
+  }
+
+  if(c.x>W-c.radius){
+
+    c.x=W-c.radius;
+    c.vx=-Math.abs(c.vx);
+  }
+
+  if(c.y<c.radius){
+
+    c.y=c.radius;
+    c.vy=Math.abs(c.vy);
+  }
+
+  if(c.y>H-c.radius){
+
+    c.y=H-c.radius;
+    c.vy=-Math.abs(c.vy);
+  }
+
+  /*
+    사건의 지평선 안으로 들어오면
+    블랙홀에 삼켜짐
+  */
+
+  if(
+    dist <
+    blackHole.radius+5
+  ){
+
+    c.alive=false;
+
+    createDeathParticles(c);
+  }
+}
+
+/* =============================
+   BACKGROUND
+============================= */
+
+function drawBackground(){
+
+  ctx.fillStyle="#010208";
+
+  ctx.fillRect(
+    0,0,W,H
+  );
+
+  /*
+    별
+  */
+
+  ctx.fillStyle=
+  "rgba(255,255,255,.23)";
+
+  for(let i=0;i<32;i++){
+
+    const x =
+    (i*97)%W;
+
+    const y =
+    (i*53)%H;
+
+    ctx.fillRect(
+      x,y,1,1
+    );
+  }
+
+  /*
+    중심 보라색 공간 빛
+  */
+
+  const glow =
+  ctx.createRadialGradient(
+    blackHole.x,
+    blackHole.y,
+    15,
+    blackHole.x,
+    blackHole.y,
+    145
+  );
+
+  glow.addColorStop(
+    0,
+    "rgba(120,60,255,.28)"
+  );
+
+  glow.addColorStop(
+    .45,
+    "rgba(82,43,210,.10)"
+  );
+
+  glow.addColorStop(
+    1,
+    "rgba(0,0,0,0)"
+  );
+
+  ctx.fillStyle=glow;
+
+  ctx.fillRect(
+    0,0,W,H
+  );
+}
+
+/* =============================
+   BLACK HOLE
+============================= */
+
+function drawBlackHole(){
+
+  blackHole.angle += .018;
+
+  ctx.save();
+
+  ctx.translate(
+    blackHole.x,
+    blackHole.y
+  );
+
+  ctx.rotate(
+    blackHole.angle
+  );
+
+  /*
+    바깥쪽 소용돌이
+  */
+
+  for(let i=0;i<4;i++){
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+      0,
+      0,
+      52-i*7,
+      18-i*2,
+      i*.65,
+      0,
+      Math.PI*2
+    );
+
+    ctx.strokeStyle =
+    `rgba(
+      ${150+i*20},
+      ${90+i*15},
+      255,
+      ${.15+i*.08}
+    )`;
+
+    ctx.lineWidth =
+    4-i*.5;
+
+    ctx.stroke();
+  }
+
+  ctx.restore();
+
+  /*
+    밝은 링
+  */
+
+  ctx.beginPath();
+
+  ctx.arc(
+    blackHole.x,
+    blackHole.y,
+    blackHole.radius+8,
+    0,
+    Math.PI*2
+  );
+
+  ctx.strokeStyle=
+  "#a66cff";
+
+  ctx.lineWidth=6;
+
+  ctx.shadowBlur=25;
+
+  ctx.shadowColor=
+  "#733cff";
+
+  ctx.stroke();
+
+  ctx.shadowBlur=0;
+
+  /*
+    검은 중심
+  */
+
+  ctx.beginPath();
+
+  ctx.arc(
+    blackHole.x,
+    blackHole.y,
+    blackHole.radius,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fillStyle="#000";
+
+  ctx.fill();
+
+  /*
+    작은 하이라이트 링
+  */
+
+  ctx.beginPath();
+
+  ctx.arc(
+    blackHole.x,
+    blackHole.y,
+    blackHole.radius+3,
+    0,
+    Math.PI*2
+  );
+
+  ctx.strokeStyle=
+  "rgba(230,210,255,.75)";
+
+  ctx.lineWidth=1.5;
+
+  ctx.stroke();
+}
+
+/* =============================
+   DRAW CREATURES
+============================= */
+
+function drawCreatures(){
+
+  for(const c of creatures){
+
+    if(!c.alive) continue;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      c.x,
+      c.y,
+      c.radius,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fillStyle=
+    "#43b9ff";
+
+    ctx.shadowBlur=9;
+
+    ctx.shadowColor=
+    "#1aa7ff";
+
+    ctx.fill();
+
+    ctx.shadowBlur=0;
+  }
+}
+
+/* =============================
+   DRAW PARTICLES
+============================= */
+
+function drawParticles(){
+
+  for(const p of particles){
+
+    ctx.globalAlpha =
+    Math.max(0,p.life);
+
+    ctx.beginPath();
+
+    ctx.arc(
+      p.x,
+      p.y,
+      p.size,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fillStyle=
+    "#ff5570";
+
+    ctx.fill();
+  }
+
+  ctx.globalAlpha=1;
+}
+
+/* =============================
+   DRAW
+============================= */
+
+function draw(){
+
+  drawBackground();
+
+  drawBlackHole();
+
+  drawCreatures();
+
+  drawParticles();
+}
+
+/* =============================
+   LOOP
+============================= */
+
+function loop(now){
+
+  if(!running) return;
+
+  const elapsed =
+  (now-startTime)/1000;
+
+  const remaining =
+  Math.max(
+    0,
+    LIMIT-elapsed
+  );
+
+  const dt =
+  Math.min(
+    .035,
+    (now-lastTime)/1000
+  );
+
+  lastTime=now;
+
+  for(const c of creatures){
+
+    updateCreature(c,dt);
+  }
+
+  updateParticles(dt);
+
+  const alive =
+  creatures.filter(
+    c=>c.alive
+  ).length;
+
+  remainingCount.textContent =
+  alive;
+
+  timeText.textContent =
+  remaining.toFixed(1)+"s";
+
+  progressBar.style.width =
+  (
+    remaining /
+    LIMIT *
+    100
+  )+"%";
+
+  draw();
+
+  if(remaining<=0){
+
+    finishGame();
+    return;
+  }
+
+  animationId =
+  requestAnimationFrame(loop);
+}
+
+/* =============================
+   FINISH
+============================= */
+
+function finishGame(){
+
+  running=false;
+  lastTime=0;
+
+  const survived =
+  creatures.filter(
+    c=>c.alive
+  ).length;
+
+  const lost =
+  CREATURE_COUNT-survived;
+
+  /*
+    마지막 생존자는 초록색으로 표시
+  */
+
+  drawBackground();
+  drawBlackHole();
+
+  for(const c of creatures){
+
+    if(!c.alive) continue;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      c.x,
+      c.y,
+      c.radius,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fillStyle=
+    "#42e991";
+
+    ctx.shadowBlur=9;
+
+    ctx.shadowColor=
+    "#42e991";
+
+    ctx.fill();
+
+    ctx.shadowBlur=0;
+  }
+
+  survivedCount.textContent =
+  survived;
+
+  lostCount.textContent =
+  lost;
+
+  remainingCount.textContent =
+  survived;
+
+  timeText.textContent =
+  "0.0s";
+
+  progressBar.style.width =
+  "0%";
+
+  result.style.display =
+  "block";
+
+  setTimeout(()=>{
+
+    result.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+
+  },250);
+}
+
+/* =============================
+   BUTTONS
+============================= */
+
+startBtn.addEventListener(
+  "click",
+  startGame
+);
+
+restartBtn.addEventListener(
+  "click",
+  ()=>{
+
+    resetGame();
+
+    gameWrap.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+  }
+);
+
+gradeBtn.addEventListener(
+  "click",
+  ()=>{
+
+    window.location.href =
+    YOUTUBE_URL;
+  }
+);
+
+/* =============================
+   RESIZE
+============================= */
+
+window.addEventListener(
+  "resize",
+  ()=>{
+
+    resizeCanvas();
+
+    if(!running){
+      resetGame();
+    }
+  }
+);
+
+/* =============================
+   INIT
+============================= */
+
+resizeCanvas();
+resetGame();
+
+</script>
+
+</body>
+</html>
