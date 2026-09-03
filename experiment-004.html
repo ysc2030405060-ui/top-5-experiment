@@ -1,213 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TOP .5 EXPERIMENT #004</title>
 
 <style>
-  * {
-    box-sizing: border-box;
-  }
+* { box-sizing:border-box; }
 
-  body {
-    margin: 0;
-    background: #050505;
-    color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
+body{
+  margin:0;
+  background:#050505;
+  color:white;
+  font-family:Arial,Helvetica,sans-serif;
+  overflow-x:hidden;
+  overflow-y:auto;
+}
 
-  .wrap {
-    width: min(100%, 520px);
-    margin: 0 auto;
-    padding: 16px;
-  }
+.wrap{
+  width:min(100%,520px);
+  margin:auto;
+  padding:16px;
+}
 
-  .brand {
-    text-align: center;
-    font-size: 14px;
-    opacity: 0.8;
-    margin-bottom: 8px;
-  }
+.brand{
+  text-align:center;
+  font-size:14px;
+  opacity:.8;
+  margin-bottom:8px;
+}
 
-  h1 {
-    text-align: center;
-    font-size: 24px;
-    margin: 4px 0 8px;
-  }
+h1{
+  text-align:center;
+  font-size:24px;
+  margin:4px 0 8px;
+}
 
-  .question {
-    text-align: center;
-    font-size: 21px;
-    font-weight: 800;
-    margin-bottom: 14px;
-  }
+.question{
+  text-align:center;
+  font-size:21px;
+  font-weight:900;
+  margin-bottom:14px;
+}
 
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 12px;
-  }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-bottom:12px;
+}
 
-  .stat {
-    background: #111;
-    border: 1px solid #2a2a2a;
-    border-radius: 12px;
-    padding: 10px 6px;
-    text-align: center;
-  }
+.stat{
+  background:#111;
+  border:1px solid #2a2a2a;
+  border-radius:12px;
+  padding:10px 5px;
+  text-align:center;
+}
 
-  .stat strong {
-    display: block;
-    font-size: 20px;
-  }
+.stat strong{
+  display:block;
+  font-size:20px;
+}
 
-  .stat span {
-    display: block;
-    font-size: 10px;
-    opacity: 0.7;
-    margin-top: 3px;
-  }
+.stat span{
+  display:block;
+  font-size:10px;
+  opacity:.7;
+  margin-top:3px;
+}
 
-  .game {
-    position: relative;
-    border-radius: 18px;
-    overflow: hidden;
-    background: #07111d;
-    border: 1px solid #222;
-  }
+.game{
+  position:relative;
+  overflow:hidden;
+  border-radius:18px;
+  border:1px solid #222;
+  background:#07111d;
+}
 
-  canvas {
-    display: block;
-    width: 100%;
-    height: clamp(330px, 52dvh, 470px);
-    background:
-      radial-gradient(circle at top, #102038 0%, #07111d 55%, #03070c 100%);
-  }
+canvas{
+  display:block;
+  width:100%;
+  height:clamp(330px,52dvh,470px);
+}
 
-  .overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 18px;
-    background: rgba(0, 0, 0, 0.52);
-  }
+.overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.55);
+  z-index:10;
+}
 
-  .card {
-    width: 100%;
-    max-width: 360px;
-    text-align: center;
-    background: rgba(5, 5, 5, 0.9);
-    border: 1px solid #333;
-    border-radius: 18px;
-    padding: 20px;
-  }
+.card{
+  width:100%;
+  max-width:360px;
+  text-align:center;
+  background:rgba(5,5,5,.92);
+  border:1px solid #333;
+  border-radius:18px;
+  padding:20px;
+}
 
-  .lava-icon {
-    font-size: 58px;
-    margin-bottom: 10px;
-  }
+.lava-icon{
+  font-size:58px;
+  margin-bottom:10px;
+}
 
-  .big {
-    font-size: 26px;
-    font-weight: 900;
-    margin-bottom: 8px;
-  }
+.big{
+  font-size:25px;
+  font-weight:900;
+  margin-bottom:8px;
+}
 
-  .small {
-    font-size: 14px;
-    line-height: 1.5;
-    opacity: 0.78;
-  }
+.small{
+  font-size:14px;
+  line-height:1.5;
+  opacity:.8;
+}
 
-  button {
-    width: 100%;
-    border: 0;
-    border-radius: 14px;
-    padding: 15px;
-    font-size: 16px;
-    font-weight: 800;
-    margin-top: 12px;
-    cursor: pointer;
-  }
+button{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:15px;
+  font-size:16px;
+  font-weight:900;
+  margin-top:12px;
+}
 
-  .start-btn {
-    background: #ffd400;
-    color: #111;
-  }
+.start-btn,
+.rank-btn{
+  background:#ffd400;
+  color:#111;
+}
 
-  .rank-btn {
-    background: #ffd400;
-    color: #111;
-  }
+.share-btn{
+  background:#27d17f;
+  color:#04150d;
+}
 
-  .share-btn {
-    background: #27d17f;
-    color: #04150d;
-  }
+.restart-btn{
+  background:#252525;
+  color:white;
+}
 
-  .restart-btn {
-    background: #232323;
-    color: white;
-  }
+.live{
+  position:absolute;
+  top:10px;
+  left:10px;
+  right:10px;
+  display:flex;
+  justify-content:space-between;
+  z-index:4;
+  pointer-events:none;
+  font-size:12px;
+  font-weight:900;
+}
 
-  .live {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    display: flex;
-    justify-content: space-between;
-    pointer-events: none;
-    font-size: 12px;
-    font-weight: 800;
-  }
+.pill{
+  background:rgba(0,0,0,.65);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:999px;
+  padding:7px 9px;
+}
 
-  .pill {
-    background: rgba(0,0,0,.6);
-    padding: 7px 9px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,255,255,.15);
-  }
+.hidden-heart{
+  position:absolute;
+  display:none;
+  font-size:25px;
+  z-index:6;
+  pointer-events:none;
+  filter:drop-shadow(0 0 5px red);
+}
 
-  .hidden-heart {
-    position: absolute;
-    display: none;
-    font-size: 27px;
-    z-index: 5;
-    pointer-events: none;
-    filter: drop-shadow(0 0 6px rgba(255,0,0,.6));
-  }
+.answer-box{
+  margin-top:14px;
+  padding:11px;
+  border:1px solid #3a3a3a;
+  border-radius:14px;
+  background:#101010;
+}
 
-  .answer-box {
-    margin-top: 15px;
-    padding: 12px;
-    border: 1px solid #3a3a3a;
-    border-radius: 14px;
-    background: #101010;
-  }
+.answer-title{
+  font-size:17px;
+  font-weight:900;
+}
 
-  .answer-title {
-    font-size: 17px;
-    font-weight: 900;
-    margin-bottom: 7px;
-  }
+.heart-answer{
+  font-size:38px;
+  margin:3px;
+}
 
-  .heart-answer {
-    font-size: 38px;
-  }
-
-  .footer {
-    text-align: center;
-    opacity: 0.45;
-    font-size: 11px;
-    margin: 12px 0 6px;
-  }
+.footer{
+  text-align:center;
+  opacity:.45;
+  font-size:11px;
+  margin:12px 0 6px;
+}
 </style>
 </head>
 
@@ -215,520 +208,973 @@
 
 <div class="wrap">
 
-  <div class="brand">🧪 TOP .5 EXPERIMENT</div>
+<div class="brand">
+🧪 TOP .5 EXPERIMENT
+</div>
 
-  <h1>EXPERIMENT #004</h1>
+<h1>EXPERIMENT #004</h1>
 
-  <div class="question">
-    100 CREATURES vs RISING LAVA 🌋
-  </div>
+<div class="question">
+100 CREATURES vs RISING LAVA 🌋
+</div>
 
-  <div class="stats">
-    <div class="stat">
-      <strong>100</strong>
-      <span>CREATURES</span>
-    </div>
+<div class="stats">
 
-    <div class="stat">
-      <strong>1</strong>
-      <span>RISING LAVA</span>
-    </div>
+<div class="stat">
+<strong>100</strong>
+<span>CREATURES</span>
+</div>
 
-    <div class="stat">
-      <strong>10</strong>
-      <span>SECONDS</span>
-    </div>
-  </div>
+<div class="stat">
+<strong>1</strong>
+<span>RISING LAVA</span>
+</div>
 
-  <div class="game">
+<div class="stat">
+<strong>10</strong>
+<span>SECONDS</span>
+</div>
 
-    <canvas id="canvas"></canvas>
+</div>
 
-    <div class="live" id="live" style="display:none;">
-      <div class="pill">
-        SURVIVORS: <span id="survivorCount">100</span>
-      </div>
+<div class="game">
 
-      <div class="pill">
-        TIME LEFT: <span id="timeLeft">10.0</span>
-      </div>
-    </div>
+<canvas id="canvas"></canvas>
 
-    <div class="hidden-heart" id="hiddenHeart">❤️</div>
+<div class="live" id="live" style="display:none">
 
-    <div class="overlay" id="startOverlay">
-      <div class="card">
-        <div class="lava-icon">🌋</div>
+<div class="pill">
+ALIVE:
+<span id="survivorCount">100</span>
+</div>
 
-        <div class="big">CAN THEY ESCAPE?</div>
+<div class="pill">
+TIME LEFT:
+<span id="timeLeft">10.0</span>
+</div>
 
-        <div class="small">
-          100 creatures.<br>
-          Rising lava.<br>
-          Only 10 seconds.
-        </div>
+</div>
 
-        <button class="start-btn" id="startBtn">
-          ▶ START EXPERIMENT
-        </button>
-      </div>
-    </div>
+<div class="hidden-heart" id="hiddenHeart">
+❤️
+</div>
 
-    <div class="overlay" id="resultOverlay" style="display:none;">
-      <div class="card">
+<div class="overlay" id="startOverlay">
 
-        <div class="big">
-          🧪 EXPERIMENT COMPLETE
-        </div>
+<div class="card">
 
-        <div class="big" id="resultText">
-          0 SURVIVED
-        </div>
+<div class="lava-icon">🌋</div>
 
-        <div class="small" id="resultSub">
-          0 were caught by the lava.
-        </div>
+<div class="big">
+CAN THEY ESCAPE?
+</div>
 
-        <div class="answer-box">
-          <div class="answer-title">
-            DID YOU SPOT THE ❤️? 👀
-          </div>
+<div class="small">
+100 creatures.<br>
+Rising lava.<br>
+Only 10 seconds.
+</div>
 
-          <div class="heart-answer">
-            ❤️
-          </div>
+<button class="start-btn" id="startBtn">
+▶ START EXPERIMENT
+</button>
 
-          <div class="small">
-            IT FLASHED DURING THE EXPERIMENT!
-          </div>
-        </div>
+</div>
+</div>
 
-        <button class="share-btn" id="shareBtn">
-          📤 SHARE EXPERIMENT
-        </button>
+<div
+class="overlay"
+id="resultOverlay"
+style="display:none"
+>
 
-        <button class="rank-btn" id="rankBtn">
-          🧪 CHECK YOUR EXPERIMENT RANK
-        </button>
+<div class="card">
 
-        <button class="restart-btn" id="restartBtn">
-          ↻ RUN AGAIN
-        </button>
+<div class="big">
+🧪 EXPERIMENT COMPLETE
+</div>
 
-      </div>
-    </div>
+<div class="big" id="resultText">
+0 SURVIVED
+</div>
 
-  </div>
+<div class="small" id="resultSub">
+0 were caught by the lava.
+</div>
 
-  <div class="footer">
-    TOP .5 EXPERIMENT
-  </div>
+<div class="answer-box">
+
+<div class="answer-title">
+DID YOU SPOT THE ❤️? 👀
+</div>
+
+<div class="heart-answer">
+❤️
+</div>
+
+<div class="small">
+IT FLASHED DURING THE EXPERIMENT!
+</div>
+
+</div>
+
+<button class="share-btn" id="shareBtn">
+📤 SHARE EXPERIMENT
+</button>
+
+<button class="rank-btn" id="rankBtn">
+🧪 CHECK YOUR EXPERIMENT RANK
+</button>
+
+<button class="restart-btn" id="restartBtn">
+↻ RUN AGAIN
+</button>
+
+</div>
+</div>
+
+</div>
+
+<div class="footer">
+TOP .5 EXPERIMENT
+</div>
 
 </div>
 
 <script>
+
 const CREATURE_COUNT = 100;
 const LIMIT = 10;
 
 const YOUTUBE_URL =
 "https://youtube.com/shorts/nFDuhKtV2p4";
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+const canvas =
+document.getElementById("canvas");
 
-const startOverlay = document.getElementById("startOverlay");
-const resultOverlay = document.getElementById("resultOverlay");
-const startBtn = document.getElementById("startBtn");
-const restartBtn = document.getElementById("restartBtn");
-const rankBtn = document.getElementById("rankBtn");
-const shareBtn = document.getElementById("shareBtn");
+const ctx =
+canvas.getContext("2d");
 
-const live = document.getElementById("live");
-const survivorCountEl = document.getElementById("survivorCount");
-const timeLeftEl = document.getElementById("timeLeft");
-const hiddenHeart = document.getElementById("hiddenHeart");
+const startOverlay =
+document.getElementById("startOverlay");
 
-const resultText = document.getElementById("resultText");
-const resultSub = document.getElementById("resultSub");
+const resultOverlay =
+document.getElementById("resultOverlay");
+
+const startBtn =
+document.getElementById("startBtn");
+
+const restartBtn =
+document.getElementById("restartBtn");
+
+const rankBtn =
+document.getElementById("rankBtn");
+
+const shareBtn =
+document.getElementById("shareBtn");
+
+const live =
+document.getElementById("live");
+
+const survivorCountEl =
+document.getElementById("survivorCount");
+
+const timeLeftEl =
+document.getElementById("timeLeft");
+
+const hiddenHeart =
+document.getElementById("hiddenHeart");
+
+const resultText =
+document.getElementById("resultText");
+
+const resultSub =
+document.getElementById("resultSub");
+
 
 let creatures = [];
+
 let running = false;
+
 let startTime = 0;
+
 let lastFrame = 0;
+
 let lavaY = 0;
 
 let heartShown = false;
+
 let heartTimeout = null;
 
-function resizeCanvas() {
-  const rect = canvas.getBoundingClientRect();
 
-  canvas.width = Math.floor(rect.width * devicePixelRatio);
-  canvas.height = Math.floor(rect.height * devicePixelRatio);
+function resizeCanvas(){
+
+  const rect =
+  canvas.getBoundingClientRect();
+
+  canvas.width =
+  Math.floor(
+    rect.width * devicePixelRatio
+  );
+
+  canvas.height =
+  Math.floor(
+    rect.height * devicePixelRatio
+  );
 
   ctx.setTransform(
     devicePixelRatio,
-    0,
-    0,
+    0,0,
     devicePixelRatio,
-    0,
-    0
+    0,0
   );
 }
 
-window.addEventListener("resize", resizeCanvas);
 
-function canvasWidth() {
+function W(){
   return canvas.clientWidth;
 }
 
-function canvasHeight() {
+function H(){
   return canvas.clientHeight;
 }
 
-function resetExperiment() {
+
+window.addEventListener(
+  "resize",
+  resizeCanvas
+);
+
+
+/* =========================
+   CREATE CREATURES
+========================= */
+
+function resetExperiment(){
+
   resizeCanvas();
 
   creatures = [];
 
-  const w = canvasWidth();
-  const h = canvasHeight();
+  const w = W();
+  const h = H();
 
-  lavaY = h + 20;
+  lavaY = h + 25;
 
-  for (let i = 0; i < CREATURE_COUNT; i++) {
+  for(
+    let i=0;
+    i<CREATURE_COUNT;
+    i++
+  ){
+
+    /*
+      Every creature is different.
+
+      speed:
+      how fast it can escape.
+
+      reaction:
+      when it starts running.
+
+      Some will be fast.
+      Some will be slow.
+    */
+
+    const speed =
+      17 + Math.random()*31;
+
+    const reaction =
+      0.3 + Math.random()*4.5;
+
     creatures.push({
-      x: 15 + Math.random() * (w - 30),
-      y: h * 0.25 + Math.random() * (h * 0.6),
-      vx: (Math.random() - 0.5) * 0.7,
-      vy: -(0.4 + Math.random() * 0.9),
-      alive: true,
-      radius: 3.5 + Math.random() * 1.8
+
+      x:
+      15 +
+      Math.random()*(w-30),
+
+      y:
+      h*0.28 +
+      Math.random()*(h*0.58),
+
+      speed:speed,
+
+      reaction:reaction,
+
+      vx:
+      (Math.random()-.5)*8,
+
+      alive:true,
+
+      safe:false,
+
+      radius:
+      3.4 +
+      Math.random()*1.8
     });
+
   }
 
-  heartShown = false;
-  hiddenHeart.style.display = "none";
+  heartShown=false;
 
-  if (heartTimeout) {
+  hiddenHeart.style.display=
+  "none";
+
+  if(heartTimeout){
     clearTimeout(heartTimeout);
-    heartTimeout = null;
   }
 
   draw();
 }
 
-function drawBackground(w, h) {
-  ctx.fillStyle = "#07111d";
-  ctx.fillRect(0, 0, w, h);
 
-  ctx.fillStyle = "rgba(255,255,255,0.18)";
+/* =========================
+   BACKGROUND
+========================= */
 
-  for (let i = 0; i < 35; i++) {
-    const x = (i * 83) % w;
-    const y = (i * 47) % h;
+function drawBackground(w,h){
+
+  ctx.fillStyle="#07111d";
+
+  ctx.fillRect(
+    0,0,w,h
+  );
+
+  ctx.fillStyle=
+  "rgba(255,255,255,.16)";
+
+  for(let i=0;i<32;i++){
+
+    const x=(i*83)%w;
+
+    const y=(i*47)%h;
 
     ctx.beginPath();
-    ctx.arc(x, y, 1, 0, Math.PI * 2);
+
+    ctx.arc(
+      x,y,1,
+      0,
+      Math.PI*2
+    );
+
     ctx.fill();
   }
 }
 
-function drawCreatures() {
-  for (const c of creatures) {
-    if (!c.alive) continue;
 
-    ctx.beginPath();
-    ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+/* =========================
+   SAFE ZONE
+========================= */
 
-    ctx.fillStyle = "#28a9ff";
-    ctx.shadowBlur = 7;
-    ctx.shadowColor = "#28a9ff";
+function drawSafeZone(w){
 
-    ctx.fill();
+  ctx.fillStyle=
+  "rgba(39,209,127,.14)";
 
-    ctx.shadowBlur = 0;
-  }
-}
+  ctx.fillRect(
+    0,0,w,58
+  );
 
-function drawLava(w, h) {
-  const gradient = ctx.createLinearGradient(0, lavaY, 0, h);
+  ctx.strokeStyle=
+  "#27d17f";
 
-  gradient.addColorStop(0, "#ffcc00");
-  gradient.addColorStop(0.18, "#ff7300");
-  gradient.addColorStop(0.55, "#ff2500");
-  gradient.addColorStop(1, "#8b0900");
+  ctx.lineWidth=2;
 
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, lavaY, w, h - lavaY);
+  ctx.setLineDash([7,7]);
 
   ctx.beginPath();
 
-  for (let x = 0; x <= w; x += 10) {
-    const wave =
-      Math.sin(x * 0.07 + performance.now() * 0.004) * 4;
+  ctx.moveTo(0,58);
 
-    if (x === 0) {
-      ctx.moveTo(x, lavaY + wave);
-    } else {
-      ctx.lineTo(x, lavaY + wave);
-    }
-  }
+  ctx.lineTo(w,58);
 
-  ctx.strokeStyle = "#ffd21a";
-  ctx.lineWidth = 4;
-  ctx.shadowBlur = 12;
-  ctx.shadowColor = "#ff6600";
-  ctx.stroke();
-  ctx.shadowBlur = 0;
-
-  for (let i = 0; i < 12; i++) {
-    const bx =
-      ((i * 71) + performance.now() * 0.03) % w;
-
-    const by =
-      lavaY +
-      15 +
-      ((i * 29) % Math.max(20, h - lavaY));
-
-    ctx.beginPath();
-    ctx.arc(bx, by, 2 + (i % 3), 0, Math.PI * 2);
-    ctx.fillStyle = "#ffd400";
-    ctx.fill();
-  }
-}
-
-function drawSafeZone(w) {
-  ctx.fillStyle = "rgba(39,209,127,0.13)";
-  ctx.fillRect(0, 0, w, 55);
-
-  ctx.strokeStyle = "#27d17f";
-  ctx.lineWidth = 2;
-  ctx.setLineDash([7, 7]);
-
-  ctx.beginPath();
-  ctx.moveTo(0, 55);
-  ctx.lineTo(w, 55);
   ctx.stroke();
 
   ctx.setLineDash([]);
 
-  ctx.fillStyle = "#27d17f";
-  ctx.font = "bold 12px Arial";
-  ctx.fillText("SAFE ZONE", 12, 28);
+  ctx.fillStyle=
+  "#27d17f";
+
+  ctx.font=
+  "bold 12px Arial";
+
+  ctx.fillText(
+    "SAFE ZONE",
+    12,
+    28
+  );
 }
 
-function draw() {
-  const w = canvasWidth();
-  const h = canvasHeight();
 
-  ctx.clearRect(0, 0, w, h);
+/* =========================
+   CREATURES
+========================= */
 
-  drawBackground(w, h);
-  drawSafeZone(w);
-  drawCreatures();
-  drawLava(w, h);
-}
+function drawCreatures(){
 
-function showHiddenHeart() {
-  if (heartShown) return;
+  for(const c of creatures){
 
-  heartShown = true;
+    if(!c.alive) continue;
 
-  const gameRect =
-    canvas.getBoundingClientRect();
+    ctx.beginPath();
 
-  const x =
-    gameRect.width * (0.65 + Math.random() * 0.15);
-
-  const y =
-    Math.min(
-      gameRect.height - 70,
-      lavaY - 40
+    ctx.arc(
+      c.x,
+      c.y,
+      c.radius,
+      0,
+      Math.PI*2
     );
 
-  hiddenHeart.style.left = `${x}px`;
-  hiddenHeart.style.top = `${Math.max(80, y)}px`;
+    if(c.safe){
 
-  hiddenHeart.style.display = "block";
+      ctx.fillStyle=
+      "#27d17f";
 
-  heartTimeout = setTimeout(() => {
-    hiddenHeart.style.display = "none";
-  }, 250);
+      ctx.shadowColor=
+      "#27d17f";
+
+    }else{
+
+      ctx.fillStyle=
+      "#28a9ff";
+
+      ctx.shadowColor=
+      "#28a9ff";
+
+    }
+
+    ctx.shadowBlur=7;
+
+    ctx.fill();
+
+    ctx.shadowBlur=0;
+  }
 }
 
-function updateCreatures(dt) {
-  const w = canvasWidth();
-  const h = canvasHeight();
 
-  for (const c of creatures) {
-    if (!c.alive) continue;
+/* =========================
+   LAVA
+========================= */
 
-    const dangerDistance =
-      c.y - lavaY;
+function drawLava(w,h){
 
-    let escapeBoost = 0;
+  const gradient =
+  ctx.createLinearGradient(
+    0,lavaY,
+    0,h
+  );
 
-    if (dangerDistance > -90) {
-  escapeBoost = 0.45;
+  gradient.addColorStop(
+    0,
+    "#ffd400"
+  );
+
+  gradient.addColorStop(
+    .18,
+    "#ff7900"
+  );
+
+  gradient.addColorStop(
+    .55,
+    "#ff2600"
+  );
+
+  gradient.addColorStop(
+    1,
+    "#820600"
+  );
+
+  ctx.fillStyle=
+  gradient;
+
+  ctx.fillRect(
+    0,
+    lavaY,
+    w,
+    Math.max(
+      0,
+      h-lavaY
+    )
+  );
+
+
+  ctx.beginPath();
+
+  for(
+    let x=0;
+    x<=w;
+    x+=9
+  ){
+
+    const wave =
+      Math.sin(
+        x*.075 +
+        performance.now()*.004
+      )*4;
+
+    if(x===0){
+
+      ctx.moveTo(
+        x,
+        lavaY+wave
+      );
+
+    }else{
+
+      ctx.lineTo(
+        x,
+        lavaY+wave
+      );
+    }
+  }
+
+  ctx.strokeStyle=
+  "#ffe03b";
+
+  ctx.lineWidth=4;
+
+  ctx.shadowBlur=12;
+
+  ctx.shadowColor=
+  "#ff5500";
+
+  ctx.stroke();
+
+  ctx.shadowBlur=0;
 }
 
-    c.vy -=
-      (0.006 + escapeBoost * 0.007) * dt;
 
-    c.vx +=
-      (Math.random() - 0.5) * 0.008 * dt;
+/* =========================
+   DRAW
+========================= */
 
-    c.vx *= 0.99;
-    c.vy *= 0.995;
+function draw(){
 
-    c.x += c.vx * dt * 0.08;
-    c.y += c.vy * dt * 0.08;
+  const w=W();
+  const h=H();
 
-    if (c.x < 5) {
-      c.x = 5;
-      c.vx *= -0.8;
+  ctx.clearRect(
+    0,0,w,h
+  );
+
+  drawBackground(w,h);
+
+  drawSafeZone(w);
+
+  drawCreatures();
+
+  drawLava(w,h);
+}
+
+
+/* =========================
+   HIDDEN HEART
+========================= */
+
+function showHiddenHeart(){
+
+  if(heartShown) return;
+
+  heartShown=true;
+
+  /*
+    Put the heart close to
+    the lava so it blends
+    into the orange/red scene.
+  */
+
+  const x =
+    W() *
+    (
+      .58 +
+      Math.random()*.20
+    );
+
+  const y =
+    Math.max(
+      100,
+      Math.min(
+        H()-70,
+        lavaY-38
+      )
+    );
+
+  hiddenHeart.style.left=
+  `${x}px`;
+
+  hiddenHeart.style.top=
+  `${y}px`;
+
+  hiddenHeart.style.display=
+  "block";
+
+  heartTimeout=
+  setTimeout(
+    ()=>{
+      hiddenHeart.style.display=
+      "none";
+    },
+    250
+  );
+}
+
+
+/* =========================
+   CREATURE MOVEMENT
+========================= */
+
+function updateCreatures(
+  dt,
+  elapsed
+){
+
+  const w=W();
+
+  for(
+    const c of creatures
+  ){
+
+    if(
+      !c.alive ||
+      c.safe
+    ){
+      continue;
     }
 
-    if (c.x > w - 5) {
-      c.x = w - 5;
-      c.vx *= -0.8;
+
+    /*
+      Creature has not
+      reacted yet.
+    */
+
+    if(
+      elapsed <
+      c.reaction
+    ){
+
+      c.x +=
+      c.vx*dt;
+
+    }else{
+
+      /*
+        Once it reacts,
+        it runs upward.
+      */
+
+      c.y -=
+      c.speed*dt;
+
+      c.x +=
+      c.vx*dt;
+
+      /*
+        Slight random movement.
+      */
+
+      c.x +=
+      (
+        Math.random()-.5
+      )*8*dt;
     }
 
-    if (c.y < 10) {
-      c.y = 10;
-      c.vy *= -0.25;
+
+    /*
+      Side walls.
+    */
+
+    if(c.x<6){
+
+      c.x=6;
+
+      c.vx=
+      Math.abs(c.vx);
     }
 
-    if (c.y + c.radius >= lavaY) {
-      c.alive = false;
+    if(c.x>w-6){
+
+      c.x=w-6;
+
+      c.vx=
+      -Math.abs(c.vx);
+    }
+
+
+    /*
+      Reached SAFE ZONE.
+    */
+
+    if(c.y<=52){
+
+      c.y =
+        15 +
+        Math.random()*30;
+
+      c.safe=true;
+
+      continue;
+    }
+
+
+    /*
+      Lava catches creature.
+    */
+
+    if(
+      c.y +
+      c.radius >=
+      lavaY
+    ){
+
+      c.alive=false;
     }
   }
 }
 
-function animate(timestamp) {
-  if (!running) return;
+
+/* =========================
+   ANIMATION
+========================= */
+
+function animate(timestamp){
+
+  if(!running) return;
 
   const elapsed =
-    (timestamp - startTime) / 1000;
+    (
+      timestamp -
+      startTime
+    )/1000;
 
   const remaining =
-    Math.max(0, LIMIT - elapsed);
+    Math.max(
+      0,
+      LIMIT-elapsed
+    );
+
+  const rawDt =
+    (
+      timestamp -
+      lastFrame
+    )/1000;
 
   const dt =
     Math.min(
-      34,
-      timestamp - lastFrame || 16
+      .04,
+      rawDt || .016
     );
 
-  lastFrame = timestamp;
+  lastFrame=
+  timestamp;
 
-  const h = canvasHeight();
+
+  /*
+    Lava rises slowly first,
+    then becomes dangerous.
+  */
 
   const progress =
-    Math.min(1, elapsed / LIMIT);
+    Math.min(
+      1,
+      elapsed/LIMIT
+    );
+
+  const eased =
+    Math.pow(
+      progress,
+      1.08
+    );
 
   lavaY =
-    h + 20 -
-    progress * (h - 85);
+    H()+25 -
+    eased*
+    (
+      H()-82
+    );
 
-  updateCreatures(dt);
 
-  const survivors =
-    creatures.filter(c => c.alive).length;
+  updateCreatures(
+    dt,
+    elapsed
+  );
 
-  survivorCountEl.textContent =
-    survivors;
 
-  timeLeftEl.textContent =
-    remaining.toFixed(1);
+  const alive =
+    creatures.filter(
+      c=>c.alive
+    ).length;
 
-  if (
-    elapsed >= 4.6 &&
-    elapsed <= 5.1 &&
+  survivorCountEl.textContent=
+  alive;
+
+  timeLeftEl.textContent=
+  remaining.toFixed(1);
+
+
+  /*
+    Hidden heart appears
+    around the middle.
+  */
+
+  if(
+    elapsed>=4.7 &&
     !heartShown
-  ) {
+  ){
+
     showHiddenHeart();
   }
 
+
   draw();
 
-  if (elapsed >= LIMIT) {
+
+  if(
+    elapsed>=LIMIT
+  ){
+
     finishExperiment();
+
     return;
   }
 
-  requestAnimationFrame(animate);
+
+  requestAnimationFrame(
+    animate
+  );
 }
 
-function startExperiment() {
+
+/* =========================
+   START
+========================= */
+
+function startExperiment(){
+
   resetExperiment();
 
-  startOverlay.style.display = "none";
-  resultOverlay.style.display = "none";
-  live.style.display = "flex";
+  startOverlay.style.display=
+  "none";
 
-  running = true;
+  resultOverlay.style.display=
+  "none";
 
-  startTime = performance.now();
-  lastFrame = startTime;
+  live.style.display=
+  "flex";
 
-  requestAnimationFrame(animate);
+  running=true;
+
+  startTime=
+  performance.now();
+
+  lastFrame=
+  startTime;
+
+  requestAnimationFrame(
+    animate
+  );
 }
 
-function finishExperiment() {
-  running = false;
 
-  live.style.display = "none";
-  hiddenHeart.style.display = "none";
+/* =========================
+   FINISH
+========================= */
+
+function finishExperiment(){
+
+  running=false;
+
+  live.style.display=
+  "none";
+
+  hiddenHeart.style.display=
+  "none";
+
+
+  /*
+    A survivor must actually
+    reach the safe zone.
+  */
 
   const survivors =
-    creatures.filter(c => c.alive).length;
+    creatures.filter(
+      c=>c.safe
+    ).length;
 
   const eliminated =
-    CREATURE_COUNT - survivors;
+    CREATURE_COUNT -
+    survivors;
 
-  resultText.textContent =
-    `${survivors} SURVIVED`;
 
-  resultSub.textContent =
-    `${eliminated} were caught by the lava.`;
+  resultText.textContent=
+  `${survivors} SURVIVED`;
 
-  resultOverlay.style.display = "flex";
+  resultSub.textContent=
+  `${eliminated} were caught by the lava.`;
+
+  resultOverlay.style.display=
+  "flex";
 }
+
+
+/* =========================
+   BUTTONS
+========================= */
 
 startBtn.addEventListener(
   "click",
   startExperiment
 );
 
+
 restartBtn.addEventListener(
   "click",
   startExperiment
 );
 
+
 rankBtn.addEventListener(
   "click",
-  () => {
-    window.location.href = YOUTUBE_URL;
+  ()=>{
+
+    window.location.href=
+    YOUTUBE_URL;
+
   }
 );
 
+
 shareBtn.addEventListener(
   "click",
-  async () => {
+  async ()=>{
 
-    const shareData = {
-      title: "TOP .5 EXPERIMENT #004",
-      text: "Can 100 creatures survive rising lava?",
-      url: window.location.href
+    const shareData={
+
+      title:
+      "TOP .5 EXPERIMENT #004",
+
+      text:
+      "Can 100 creatures survive rising lava? 🌋",
+
+      url:
+      window.location.href
+
     };
 
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-      } else {
-        await navigator.clipboard.writeText(
+
+    try{
+
+      if(
+        navigator.share
+      ){
+
+        await navigator.share(
+          shareData
+        );
+
+      }else{
+
+        await navigator.clipboard
+        .writeText(
           window.location.href
         );
 
@@ -738,17 +1184,29 @@ shareBtn.addEventListener(
         shareBtn.textContent =
           "✅ LINK COPIED!";
 
-        setTimeout(() => {
-          shareBtn.textContent = original;
-        }, 1500);
+        setTimeout(
+          ()=>{
+            shareBtn.textContent=
+            original;
+          },
+          1500
+        );
       }
-    } catch (error) {
-      console.log("Share cancelled");
+
+    }catch(error){
+
+      console.log(
+        "Share cancelled"
+      );
+
     }
+
   }
 );
 
+
 resetExperiment();
+
 </script>
 
 </body>
