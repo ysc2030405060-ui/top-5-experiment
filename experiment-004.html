@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TOP .5 EXPERIMENT #004</title>
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: #050505;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .wrap {
+    width: min(100%, 520px);
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  .brand {
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.8;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 24px;
+    margin: 4px 0 8px;
+  }
+
+  .question {
+    text-align: center;
+    font-size: 21px;
+    font-weight: 800;
+    margin-bottom: 14px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .stat {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    border-radius: 12px;
+    padding: 10px 6px;
+    text-align: center;
+  }
+
+  .stat strong {
+    display: block;
+    font-size: 20px;
+  }
+
+  .stat span {
+    display: block;
+    font-size: 10px;
+    opacity: 0.7;
+    margin-top: 3px;
+  }
+
+  .game {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #07111d;
+    border: 1px solid #222;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: clamp(330px, 52dvh, 470px);
+    background:
+      radial-gradient(circle at top, #102038 0%, #07111d 55%, #03070c 100%);
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(0, 0, 0, 0.52);
+  }
+
+  .card {
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+    background: rgba(5, 5, 5, 0.9);
+    border: 1px solid #333;
+    border-radius: 18px;
+    padding: 20px;
+  }
+
+  .lava-icon {
+    font-size: 58px;
+    margin-bottom: 10px;
+  }
+
+  .big {
+    font-size: 26px;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+
+  .small {
+    font-size: 14px;
+    line-height: 1.5;
+    opacity: 0.78;
+  }
+
+  button {
+    width: 100%;
+    border: 0;
+    border-radius: 14px;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 800;
+    margin-top: 12px;
+    cursor: pointer;
+  }
+
+  .start-btn {
+    background: #ffd400;
+    color: #111;
+  }
+
+  .rank-btn {
+    background: #ffd400;
+    color: #111;
+  }
+
+  .share-btn {
+    background: #27d17f;
+    color: #04150d;
+  }
+
+  .restart-btn {
+    background: #232323;
+    color: white;
+  }
+
+  .live {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .pill {
+    background: rgba(0,0,0,.6);
+    padding: 7px 9px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.15);
+  }
+
+  .hidden-heart {
+    position: absolute;
+    display: none;
+    font-size: 27px;
+    z-index: 5;
+    pointer-events: none;
+    filter: drop-shadow(0 0 6px rgba(255,0,0,.6));
+  }
+
+  .answer-box {
+    margin-top: 15px;
+    padding: 12px;
+    border: 1px solid #3a3a3a;
+    border-radius: 14px;
+    background: #101010;
+  }
+
+  .answer-title {
+    font-size: 17px;
+    font-weight: 900;
+    margin-bottom: 7px;
+  }
+
+  .heart-answer {
+    font-size: 38px;
+  }
+
+  .footer {
+    text-align: center;
+    opacity: 0.45;
+    font-size: 11px;
+    margin: 12px 0 6px;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="brand">🧪 TOP .5 EXPERIMENT</div>
+
+  <h1>EXPERIMENT #004</h1>
+
+  <div class="question">
+    100 CREATURES vs RISING LAVA 🌋
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <strong>100</strong>
+      <span>CREATURES</span>
+    </div>
+
+    <div class="stat">
+      <strong>1</strong>
+      <span>RISING LAVA</span>
+    </div>
+
+    <div class="stat">
+      <strong>10</strong>
+      <span>SECONDS</span>
+    </div>
+  </div>
+
+  <div class="game">
+
+    <canvas id="canvas"></canvas>
+
+    <div class="live" id="live" style="display:none;">
+      <div class="pill">
+        SURVIVORS: <span id="survivorCount">100</span>
+      </div>
+
+      <div class="pill">
+        TIME LEFT: <span id="timeLeft">10.0</span>
+      </div>
+    </div>
+
+    <div class="hidden-heart" id="hiddenHeart">❤️</div>
+
+    <div class="overlay" id="startOverlay">
+      <div class="card">
+        <div class="lava-icon">🌋</div>
+
+        <div class="big">CAN THEY ESCAPE?</div>
+
+        <div class="small">
+          100 creatures.<br>
+          Rising lava.<br>
+          Only 10 seconds.
+        </div>
+
+        <button class="start-btn" id="startBtn">
+          ▶ START EXPERIMENT
+        </button>
+      </div>
+    </div>
+
+    <div class="overlay" id="resultOverlay" style="display:none;">
+      <div class="card">
+
+        <div class="big">
+          🧪 EXPERIMENT COMPLETE
+        </div>
+
+        <div class="big" id="resultText">
+          0 SURVIVED
+        </div>
+
+        <div class="small" id="resultSub">
+          0 were caught by the lava.
+        </div>
+
+        <div class="answer-box">
+          <div class="answer-title">
+            DID YOU SPOT THE ❤️? 👀
+          </div>
+
+          <div class="heart-answer">
+            ❤️
+          </div>
+
+          <div class="small">
+            IT FLASHED DURING THE EXPERIMENT!
+          </div>
+        </div>
+
+        <button class="share-btn" id="shareBtn">
+          📤 SHARE EXPERIMENT
+        </button>
+
+        <button class="rank-btn" id="rankBtn">
+          🧪 CHECK YOUR EXPERIMENT RANK
+        </button>
+
+        <button class="restart-btn" id="restartBtn">
+          ↻ RUN AGAIN
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    TOP .5 EXPERIMENT
+  </div>
+
+</div>
+
+<script>
+const CREATURE_COUNT = 100;
+const LIMIT = 10;
+
+const YOUTUBE_URL =
+"https://youtube.com/shorts/nFDuhKtV2p4";
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const startOverlay = document.getElementById("startOverlay");
+const resultOverlay = document.getElementById("resultOverlay");
+const startBtn = document.getElementById("startBtn");
+const restartBtn = document.getElementById("restartBtn");
+const rankBtn = document.getElementById("rankBtn");
+const shareBtn = document.getElementById("shareBtn");
+
+const live = document.getElementById("live");
+const survivorCountEl = document.getElementById("survivorCount");
+const timeLeftEl = document.getElementById("timeLeft");
+const hiddenHeart = document.getElementById("hiddenHeart");
+
+const resultText = document.getElementById("resultText");
+const resultSub = document.getElementById("resultSub");
+
+let creatures = [];
+let running = false;
+let startTime = 0;
+let lastFrame = 0;
+let lavaY = 0;
+
+let heartShown = false;
+let heartTimeout = null;
+
+function resizeCanvas() {
+  const rect = canvas.getBoundingClientRect();
+
+  canvas.width = Math.floor(rect.width * devicePixelRatio);
+  canvas.height = Math.floor(rect.height * devicePixelRatio);
+
+  ctx.setTransform(
+    devicePixelRatio,
+    0,
+    0,
+    devicePixelRatio,
+    0,
+    0
+  );
+}
+
+window.addEventListener("resize", resizeCanvas);
+
+function canvasWidth() {
+  return canvas.clientWidth;
+}
+
+function canvasHeight() {
+  return canvas.clientHeight;
+}
+
+function resetExperiment() {
+  resizeCanvas();
+
+  creatures = [];
+
+  const w = canvasWidth();
+  const h = canvasHeight();
+
+  lavaY = h + 20;
+
+  for (let i = 0; i < CREATURE_COUNT; i++) {
+    creatures.push({
+      x: 15 + Math.random() * (w - 30),
+      y: h * 0.25 + Math.random() * (h * 0.6),
+      vx: (Math.random() - 0.5) * 0.7,
+      vy: -(0.4 + Math.random() * 0.9),
+      alive: true,
+      radius: 3.5 + Math.random() * 1.8
+    });
+  }
+
+  heartShown = false;
+  hiddenHeart.style.display = "none";
+
+  if (heartTimeout) {
+    clearTimeout(heartTimeout);
+    heartTimeout = null;
+  }
+
+  draw();
+}
+
+function drawBackground(w, h) {
+  ctx.fillStyle = "#07111d";
+  ctx.fillRect(0, 0, w, h);
+
+  ctx.fillStyle = "rgba(255,255,255,0.18)";
+
+  for (let i = 0; i < 35; i++) {
+    const x = (i * 83) % w;
+    const y = (i * 47) % h;
+
+    ctx.beginPath();
+    ctx.arc(x, y, 1, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawCreatures() {
+  for (const c of creatures) {
+    if (!c.alive) continue;
+
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+
+    ctx.fillStyle = "#28a9ff";
+    ctx.shadowBlur = 7;
+    ctx.shadowColor = "#28a9ff";
+
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+  }
+}
+
+function drawLava(w, h) {
+  const gradient = ctx.createLinearGradient(0, lavaY, 0, h);
+
+  gradient.addColorStop(0, "#ffcc00");
+  gradient.addColorStop(0.18, "#ff7300");
+  gradient.addColorStop(0.55, "#ff2500");
+  gradient.addColorStop(1, "#8b0900");
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, lavaY, w, h - lavaY);
+
+  ctx.beginPath();
+
+  for (let x = 0; x <= w; x += 10) {
+    const wave =
+      Math.sin(x * 0.07 + performance.now() * 0.004) * 4;
+
+    if (x === 0) {
+      ctx.moveTo(x, lavaY + wave);
+    } else {
+      ctx.lineTo(x, lavaY + wave);
+    }
+  }
+
+  ctx.strokeStyle = "#ffd21a";
+  ctx.lineWidth = 4;
+  ctx.shadowBlur = 12;
+  ctx.shadowColor = "#ff6600";
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  for (let i = 0; i < 12; i++) {
+    const bx =
+      ((i * 71) + performance.now() * 0.03) % w;
+
+    const by =
+      lavaY +
+      15 +
+      ((i * 29) % Math.max(20, h - lavaY));
+
+    ctx.beginPath();
+    ctx.arc(bx, by, 2 + (i % 3), 0, Math.PI * 2);
+    ctx.fillStyle = "#ffd400";
+    ctx.fill();
+  }
+}
+
+function drawSafeZone(w) {
+  ctx.fillStyle = "rgba(39,209,127,0.13)";
+  ctx.fillRect(0, 0, w, 55);
+
+  ctx.strokeStyle = "#27d17f";
+  ctx.lineWidth = 2;
+  ctx.setLineDash([7, 7]);
+
+  ctx.beginPath();
+  ctx.moveTo(0, 55);
+  ctx.lineTo(w, 55);
+  ctx.stroke();
+
+  ctx.setLineDash([]);
+
+  ctx.fillStyle = "#27d17f";
+  ctx.font = "bold 12px Arial";
+  ctx.fillText("SAFE ZONE", 12, 28);
+}
+
+function draw() {
+  const w = canvasWidth();
+  const h = canvasHeight();
+
+  ctx.clearRect(0, 0, w, h);
+
+  drawBackground(w, h);
+  drawSafeZone(w);
+  drawCreatures();
+  drawLava(w, h);
+}
+
+function showHiddenHeart() {
+  if (heartShown) return;
+
+  heartShown = true;
+
+  const gameRect =
+    canvas.getBoundingClientRect();
+
+  const x =
+    gameRect.width * (0.65 + Math.random() * 0.15);
+
+  const y =
+    Math.min(
+      gameRect.height - 70,
+      lavaY - 40
+    );
+
+  hiddenHeart.style.left = `${x}px`;
+  hiddenHeart.style.top = `${Math.max(80, y)}px`;
+
+  hiddenHeart.style.display = "block";
+
+  heartTimeout = setTimeout(() => {
+    hiddenHeart.style.display = "none";
+  }, 250);
+}
+
+function updateCreatures(dt) {
+  const w = canvasWidth();
+  const h = canvasHeight();
+
+  for (const c of creatures) {
+    if (!c.alive) continue;
+
+    const dangerDistance =
+      c.y - lavaY;
+
+    let escapeBoost = 0;
+
+    if (dangerDistance > -130) {
+      escapeBoost = 1.1;
+    }
+
+    c.vy -=
+      (0.006 + escapeBoost * 0.007) * dt;
+
+    c.vx +=
+      (Math.random() - 0.5) * 0.008 * dt;
+
+    c.vx *= 0.99;
+    c.vy *= 0.995;
+
+    c.x += c.vx * dt * 0.08;
+    c.y += c.vy * dt * 0.08;
+
+    if (c.x < 5) {
+      c.x = 5;
+      c.vx *= -0.8;
+    }
+
+    if (c.x > w - 5) {
+      c.x = w - 5;
+      c.vx *= -0.8;
+    }
+
+    if (c.y < 10) {
+      c.y = 10;
+      c.vy *= -0.25;
+    }
+
+    if (c.y + c.radius >= lavaY) {
+      c.alive = false;
+    }
+  }
+}
+
+function animate(timestamp) {
+  if (!running) return;
+
+  const elapsed =
+    (timestamp - startTime) / 1000;
+
+  const remaining =
+    Math.max(0, LIMIT - elapsed);
+
+  const dt =
+    Math.min(
+      34,
+      timestamp - lastFrame || 16
+    );
+
+  lastFrame = timestamp;
+
+  const h = canvasHeight();
+
+  const progress =
+    Math.min(1, elapsed / LIMIT);
+
+  lavaY =
+    h + 20 -
+    progress * (h - 85);
+
+  updateCreatures(dt);
+
+  const survivors =
+    creatures.filter(c => c.alive).length;
+
+  survivorCountEl.textContent =
+    survivors;
+
+  timeLeftEl.textContent =
+    remaining.toFixed(1);
+
+  if (
+    elapsed >= 4.6 &&
+    elapsed <= 5.1 &&
+    !heartShown
+  ) {
+    showHiddenHeart();
+  }
+
+  draw();
+
+  if (elapsed >= LIMIT) {
+    finishExperiment();
+    return;
+  }
+
+  requestAnimationFrame(animate);
+}
+
+function startExperiment() {
+  resetExperiment();
+
+  startOverlay.style.display = "none";
+  resultOverlay.style.display = "none";
+  live.style.display = "flex";
+
+  running = true;
+
+  startTime = performance.now();
+  lastFrame = startTime;
+
+  requestAnimationFrame(animate);
+}
+
+function finishExperiment() {
+  running = false;
+
+  live.style.display = "none";
+  hiddenHeart.style.display = "none";
+
+  const survivors =
+    creatures.filter(c => c.alive).length;
+
+  const eliminated =
+    CREATURE_COUNT - survivors;
+
+  resultText.textContent =
+    `${survivors} SURVIVED`;
+
+  resultSub.textContent =
+    `${eliminated} were caught by the lava.`;
+
+  resultOverlay.style.display = "flex";
+}
+
+startBtn.addEventListener(
+  "click",
+  startExperiment
+);
+
+restartBtn.addEventListener(
+  "click",
+  startExperiment
+);
+
+rankBtn.addEventListener(
+  "click",
+  () => {
+    window.location.href = YOUTUBE_URL;
+  }
+);
+
+shareBtn.addEventListener(
+  "click",
+  async () => {
+
+    const shareData = {
+      title: "TOP .5 EXPERIMENT #004",
+      text: "Can 100 creatures survive rising lava?",
+      url: window.location.href
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(
+          window.location.href
+        );
+
+        const original =
+          shareBtn.textContent;
+
+        shareBtn.textContent =
+          "✅ LINK COPIED!";
+
+        setTimeout(() => {
+          shareBtn.textContent = original;
+        }, 1500);
+      }
+    } catch (error) {
+      console.log("Share cancelled");
+    }
+  }
+);
+
+resetExperiment();
+</script>
+
+</body>
+</html>
