@@ -569,9 +569,9 @@ function updateCreatures(dt) {
 
     let escapeBoost = 0;
 
-    if (dangerDistance > -130) {
-      escapeBoost = 1.1;
-    }
+    if (dangerDistance > -90) {
+  escapeBoost = 0.45;
+}
 
     c.vy -=
       (0.006 + escapeBoost * 0.007) * dt;
