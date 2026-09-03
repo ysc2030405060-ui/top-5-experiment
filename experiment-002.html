@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>최상위 .5 실험 #002</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  background:#050810;
+  color:#fff;
+  font-family:Arial,"Noto Sans KR",sans-serif;
+}
+
+body{
+  overflow-x:hidden;
+  overflow-y:auto;
+}
+
+.app{
+  width:100%;
+  max-width:520px;
+  min-height:100dvh;
+  margin:auto;
+  padding:18px 14px 40px;
+}
+
+/* BRAND */
+
+.brand{
+  text-align:center;
+  color:#ffd84d;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  margin-top:3px;
+}
+
+h1{
+  text-align:center;
+  margin:9px 0 5px;
+  font-size:25px;
+}
+
+.question{
+  text-align:center;
+  color:#d7deed;
+  font-size:15px;
+  line-height:1.5;
+  margin-bottom:14px;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.stat{
+  background:#0d1421;
+  border:1px solid #1c293b;
+  border-radius:13px;
+  text-align:center;
+  padding:10px 4px;
+}
+
+.stat strong{
+  display:block;
+  color:#ffd84d;
+  font-size:19px;
+  margin-bottom:3px;
+}
+
+.stat span{
+  color:#8f9bad;
+  font-size:10px;
+}
+
+/* GAME */
+
+.game-wrap{
+  position:relative;
+  width:100%;
+  height:clamp(330px,52dvh,470px);
+  border-radius:20px;
+  overflow:hidden;
+  border:1px solid #25364d;
+  background:#02050b;
+  box-shadow:0 0 30px rgba(0,0,0,.4);
+}
+
+canvas{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+/* START SCREEN */
+
+.start-screen{
+  position:absolute;
+  inset:0;
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:25px;
+  background:
+    radial-gradient(circle at center,
+      rgba(31,107,255,.15),
+      rgba(2,5,11,.96) 65%);
+}
+
+.start-icon{
+  font-size:54px;
+  margin-bottom:10px;
+}
+
+.start-title{
+  font-size:24px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+.start-text{
+  font-size:14px;
+  line-height:1.55;
+  color:#bac5d5;
+  margin-bottom:22px;
+}
+
+.start-btn{
+  width:85%;
+  max-width:310px;
+  border:0;
+  border-radius:14px;
+  padding:16px;
+  background:#ffd84d;
+  color:#111;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+/* EXIT */
+
+.exit-label{
+  position:absolute;
+  right:8px;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:3;
+  pointer-events:none;
+  background:#28e58b;
+  color:#00190d;
+  font-size:12px;
+  font-weight:900;
+  padding:7px 5px;
+  border-radius:8px 0 0 8px;
+  box-shadow:0 0 18px rgba(40,229,139,.7);
+}
+
+/* TIMER */
+
+.timer-box{
+  margin-top:12px;
+}
+
+.timer-row{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  margin-bottom:6px;
+  color:#aeb9c8;
+}
+
+#timeText{
+  color:#ffd84d;
+  font-weight:900;
+}
+
+.progress{
+  width:100%;
+  height:8px;
+  background:#151d29;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  width:100%;
+  height:100%;
+  background:#ffd84d;
+  transition:width .08s linear;
+}
+
+/* RESULT */
+
+.result{
+  display:none;
+  margin-top:16px;
+  background:#0d1421;
+  border:1px solid #24344b;
+  border-radius:18px;
+  padding:19px;
+  text-align:center;
+}
+
+.result-title{
+  color:#ffd84d;
+  font-weight:900;
+  font-size:15px;
+  margin-bottom:10px;
+}
+
+.result-number{
+  font-size:35px;
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.result-number .success{
+  color:#38e68d;
+}
+
+.result-number .fail{
+  color:#ff6474;
+}
+
+.result-desc{
+  color:#aeb9c8;
+  font-size:13px;
+  margin-bottom:17px;
+}
+
+.grade-btn{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:16px 10px;
+  background:#ffd84d;
+  color:#111;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.restart-btn{
+  width:100%;
+  margin-top:9px;
+  border:1px solid #34465e;
+  border-radius:14px;
+  padding:13px;
+  background:#111a28;
+  color:#dfe7f2;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.legend{
+  display:flex;
+  justify-content:center;
+  gap:18px;
+  margin-top:12px;
+  color:#8290a3;
+  font-size:11px;
+}
+
+.dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  margin-right:4px;
+}
+
+.blue{ background:#35a8ff; }
+.green{ background:#38e68d; }
+.red{ background:#ff6474; }
+
+.footer{
+  text-align:center;
+  color:#566275;
+  font-size:10px;
+  margin-top:18px;
+}
+
+@media(max-height:700px){
+  .game-wrap{
+    height:330px;
+  }
+
+  .app{
+    padding-top:10px;
+  }
+
+  h1{
+    font-size:21px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="brand">
+    🧪 TOP .5 EXPERIMENT
+  </div>
+
+  <h1>최상위 .5 실험 #002</h1>
+
+  <div class="question">
+    생명체 100마리에게<br>
+    <strong>출구를 단 하나만 주면?</strong>
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <strong>100</strong>
+      <span>생명체</span>
+    </div>
+
+    <div class="stat">
+      <strong>1</strong>
+      <span>출구</span>
+    </div>
+
+    <div class="stat">
+      <strong>10.0</strong>
+      <span>제한 시간(초)</span>
+    </div>
+
+  </div>
+
+  <div class="game-wrap" id="gameWrap">
+
+    <canvas id="canvas"></canvas>
+
+    <div class="exit-label" id="exitLabel">
+      EXIT<br>→
+    </div>
+
+    <div class="start-screen" id="startScreen">
+
+      <div class="start-icon">🚪</div>
+
+      <div class="start-title">
+        출구는 단 하나
+      </div>
+
+      <div class="start-text">
+        100마리 중 몇 마리가<br>
+        10초 안에 탈출할 수 있을까요?
+      </div>
+
+      <button class="start-btn" id="startBtn">
+        ▶ 실험 시작
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="timer-box">
+
+    <div class="timer-row">
+      <span>남은 시간</span>
+      <span id="timeText">10.0초</span>
+    </div>
+
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+  </div>
+
+  <div class="legend">
+    <span><i class="dot blue"></i>탈출 중</span>
+    <span><i class="dot green"></i>탈출 성공</span>
+    <span><i class="dot red"></i>시간 초과</span>
+  </div>
+
+  <div class="result" id="result">
+
+    <div class="result-title">
+      🧪 실험 종료
+    </div>
+
+    <div class="result-number">
+      <span class="success" id="successCount">0</span>
+      탈출 /
+      <span class="fail" id="failCount">0</span>
+      실패
+    </div>
+
+    <div class="result-desc" id="resultDesc">
+      결과 계산 중...
+    </div>
+
+    <button class="grade-btn" id="gradeBtn">
+      🧪 당신의 실험 등급 확인하기
+    </button>
+
+    <button class="restart-btn" id="restartBtn">
+      ↻ 다시 실험하기
+    </button>
+
+  </div>
+
+  <div class="footer">
+    TOP .5 EXPERIMENT · #002
+  </div>
+
+</div>
+
+<script>
+
+/* =========================
+   SETTINGS
+========================= */
+
+const CREATURE_COUNT = 100;
+const LIMIT = 10;
+
+const YOUTUBE_URL =
+  "https://youtube.com/shorts/68GRplRRDRQ";
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const canvas =
+  document.getElementById("canvas");
+
+const ctx =
+  canvas.getContext("2d");
+
+const gameWrap =
+  document.getElementById("gameWrap");
+
+const startScreen =
+  document.getElementById("startScreen");
+
+const startBtn =
+  document.getElementById("startBtn");
+
+const timeText =
+  document.getElementById("timeText");
+
+const progressBar =
+  document.getElementById("progressBar");
+
+const result =
+  document.getElementById("result");
+
+const successCount =
+  document.getElementById("successCount");
+
+const failCount =
+  document.getElementById("failCount");
+
+const resultDesc =
+  document.getElementById("resultDesc");
+
+const restartBtn =
+  document.getElementById("restartBtn");
+
+const gradeBtn =
+  document.getElementById("gradeBtn");
+
+/* =========================
+   VARIABLES
+========================= */
+
+let W = 0;
+let H = 0;
+
+let creatures = [];
+
+let running = false;
+let finished = false;
+
+let startTime = 0;
+
+let animationId = null;
+
+let exit = {
+  x:0,
+  y:0,
+  width:20,
+  height:90
+};
+
+/* =========================
+   CANVAS SIZE
+========================= */
+
+function resizeCanvas(){
+
+  const rect =
+    gameWrap.getBoundingClientRect();
+
+  const dpr =
+    Math.min(window.devicePixelRatio || 1, 2);
+
+  W = rect.width;
+  H = rect.height;
+
+  canvas.width =
+    Math.round(W * dpr);
+
+  canvas.height =
+    Math.round(H * dpr);
+
+  canvas.style.width =
+    W + "px";
+
+  canvas.style.height =
+    H + "px";
+
+  ctx.setTransform(
+    dpr,0,0,dpr,0,0
+  );
+
+  exit.x = W - 12;
+  exit.y = H / 2 - exit.height / 2;
+}
+
+/* =========================
+   RANDOM
+========================= */
+
+function random(min,max){
+  return Math.random() * (max-min) + min;
+}
+
+/* =========================
+   CREATURE
+========================= */
+
+function createCreature(){
+
+  const angle =
+    random(0,Math.PI*2);
+
+  const speed =
+    random(28,58);
+
+  return {
+
+    x:random(15,W*0.68),
+
+    y:random(15,H-15),
+
+    vx:Math.cos(angle)*speed,
+
+    vy:Math.sin(angle)*speed,
+
+    radius:random(2.5,4.2),
+
+    escaped:false,
+
+    flash:0,
+
+    wander:random(-1,1)
+
+  };
+}
+
+/* =========================
+   RESET
+========================= */
+
+function resetGame(){
+
+  if(animationId){
+    cancelAnimationFrame(animationId);
+  }
+
+  running = false;
+  finished = false;
+
+  result.style.display = "none";
+
+  startScreen.style.display = "flex";
+
+  progressBar.style.width = "100%";
+
+  timeText.textContent = "10.0초";
+
+  creatures = [];
+
+  for(let i=0;i<CREATURE_COUNT;i++){
+    creatures.push(
+      createCreature()
+    );
+  }
+
+  draw();
+}
+
+/* =========================
+   START
+========================= */
+
+function startGame(){
+
+  if(running) return;
+
+  resetGame();
+
+  startScreen.style.display = "none";
+
+  running = true;
+  finished = false;
+
+  startTime =
+    performance.now();
+
+  animationId =
+    requestAnimationFrame(loop);
+}
+
+/* =========================
+   UPDATE CREATURE
+========================= */
+
+function updateCreature(c,dt){
+
+  if(c.escaped) return;
+
+  /*
+    출구 방향으로 아주 약한 끌림을 줌.
+    완전히 직선으로 가지 않도록
+    랜덤 움직임을 섞음.
+  */
+
+  const targetX =
+    W + 10;
+
+  const targetY =
+    H / 2;
+
+  const dx =
+    targetX - c.x;
+
+  const dy =
+    targetY - c.y;
+
+  const dist =
+    Math.sqrt(dx*dx + dy*dy) || 1;
+
+  /*
+    개체마다 출구를 찾는 능력이 다르게 보이도록
+    약한 랜덤성 추가
+  */
+
+  const attraction =
+    12 + Math.sin(
+      c.x * .02 +
+      c.y * .01
+    ) * 7;
+
+  c.vx +=
+    (dx/dist) *
+    attraction *
+    dt;
+
+  c.vy +=
+    (dy/dist) *
+    attraction *
+    dt;
+
+  c.vx +=
+    random(-19,19) *
+    dt;
+
+  c.vy +=
+    random(-25,25) *
+    dt;
+
+  /*
+    속도 제한
+  */
+
+  const speed =
+    Math.sqrt(
+      c.vx*c.vx +
+      c.vy*c.vy
+    );
+
+  const maxSpeed = 68;
+
+  if(speed > maxSpeed){
+
+    c.vx =
+      c.vx / speed *
+      maxSpeed;
+
+    c.vy =
+      c.vy / speed *
+      maxSpeed;
+  }
+
+  c.x += c.vx * dt;
+  c.y += c.vy * dt;
+
+  /*
+    위 / 아래 벽
+  */
+
+  if(c.y < c.radius){
+
+    c.y = c.radius;
+    c.vy = Math.abs(c.vy);
+
+  }
+
+  if(c.y > H-c.radius){
+
+    c.y = H-c.radius;
+    c.vy = -Math.abs(c.vy);
+
+  }
+
+  /*
+    왼쪽 벽
+  */
+
+  if(c.x < c.radius){
+
+    c.x = c.radius;
+    c.vx = Math.abs(c.vx);
+
+  }
+
+  /*
+    오른쪽 벽.
+    출구 부분이 아니면 튕김.
+  */
+
+  if(c.x >
+     W-c.radius-5){
+
+    const insideExit =
+      c.y >
+        exit.y &&
+      c.y <
+        exit.y + exit.height;
+
+    if(insideExit){
+
+      c.escaped = true;
+      c.flash = 1;
+
+    }else{
+
+      c.x =
+        W-c.radius-6;
+
+      c.vx =
+        -Math.abs(c.vx);
+
+    }
+  }
+}
+
+/* =========================
+   DRAW BACKGROUND
+========================= */
+
+function drawBackground(){
+
+  ctx.fillStyle =
+    "#02050b";
+
+  ctx.fillRect(
+    0,0,W,H
+  );
+
+  /*
+    희미한 격자
+  */
+
+  ctx.strokeStyle =
+    "rgba(90,130,180,.06)";
+
+  ctx.lineWidth = 1;
+
+  const grid = 32;
+
+  for(let x=0;x<W;x+=grid){
+
+    ctx.beginPath();
+    ctx.moveTo(x,0);
+    ctx.lineTo(x,H);
+    ctx.stroke();
+  }
+
+  for(let y=0;y<H;y+=grid){
+
+    ctx.beginPath();
+    ctx.moveTo(0,y);
+    ctx.lineTo(W,y);
+    ctx.stroke();
+  }
+}
+
+/* =========================
+   DRAW EXIT
+========================= */
+
+function drawExit(){
+
+  const gradient =
+    ctx.createLinearGradient(
+      W-30,0,W,0
+    );
+
+  gradient.addColorStop(
+    0,
+    "rgba(56,230,141,0)"
+  );
+
+  gradient.addColorStop(
+    1,
+    "rgba(56,230,141,.65)"
+  );
+
+  ctx.fillStyle =
+    gradient;
+
+  ctx.fillRect(
+    W-35,
+    exit.y,
+    35,
+    exit.height
+  );
+
+  ctx.strokeStyle =
+    "#38e68d";
+
+  ctx.lineWidth = 4;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    W-3,
+    exit.y
+  );
+
+  ctx.lineTo(
+    W-3,
+    exit.y +
+    exit.height
+  );
+
+  ctx.stroke();
+}
+
+/* =========================
+   DRAW CREATURES
+========================= */
+
+function drawCreatures(){
+
+  for(const c of creatures){
+
+    if(c.escaped){
+      continue;
+    }
+
+    ctx.beginPath();
+
+    ctx.arc(
+      c.x,
+      c.y,
+      c.radius,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fillStyle =
+      "#35a8ff";
+
+    ctx.shadowBlur = 10;
+
+    ctx.shadowColor =
+      "#35a8ff";
+
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+  }
+}
+
+/* =========================
+   DRAW
+========================= */
+
+function draw(){
+
+  drawBackground();
+
+  drawExit();
+
+  drawCreatures();
+
+  if(!running){
+
+    /*
+      시작 전에도 개체가 보이도록
+    */
+
+    drawCreatures();
+  }
+}
+
+/* =========================
+   LOOP
+========================= */
+
+function loop(now){
+
+  if(!running) return;
+
+  const elapsed =
+    (now-startTime)/1000;
+
+  const remaining =
+    Math.max(
+      0,
+      LIMIT-elapsed
+    );
+
+  /*
+    프레임 차이는 단순하게 제한
+  */
+
+  let dt = 1/60;
+
+  if(loop.lastTime){
+
+    dt =
+      Math.min(
+        .035,
+        (now-loop.lastTime)/1000
+      );
+  }
+
+  loop.lastTime = now;
+
+  for(const c of creatures){
+
+    updateCreature(
+      c,
+      dt
+    );
+  }
+
+  draw();
+
+  timeText.textContent =
+    remaining.toFixed(1)
+    + "초";
+
+  progressBar.style.width =
+    (remaining/LIMIT*100)
+    + "%";
+
+  if(remaining <= 0){
+
+    finishGame();
+    return;
+  }
+
+  animationId =
+    requestAnimationFrame(loop);
+}
+
+/* =========================
+   FINISH
+========================= */
+
+function finishGame(){
+
+  running = false;
+  finished = true;
+
+  loop.lastTime = null;
+
+  const escaped =
+    creatures.filter(
+      c => c.escaped
+    ).length;
+
+  const failed =
+    CREATURE_COUNT -
+    escaped;
+
+  /*
+    실패한 개체를 빨간색으로
+    마지막 화면에 표시
+  */
+
+  drawBackground();
+  drawExit();
+
+  for(const c of creatures){
+
+    if(c.escaped) continue;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      c.x,
+      c.y,
+      c.radius,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fillStyle =
+      "#ff6474";
+
+    ctx.shadowBlur = 8;
+    ctx.shadowColor =
+      "#ff6474";
+
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+  }
+
+  timeText.textContent =
+    "0.0초";
+
+  progressBar.style.width =
+    "0%";
+
+  successCount.textContent =
+    escaped;
+
+  failCount.textContent =
+    failed;
+
+  resultDesc.textContent =
+    "100마리 중 " +
+    escaped +
+    "마리가 10초 안에 탈출했습니다.";
+
+  result.style.display =
+    "block";
+
+  setTimeout(()=>{
+
+    result.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+
+  },250);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+startBtn.addEventListener(
+  "click",
+  startGame
+);
+
+restartBtn.addEventListener(
+  "click",
+  ()=>{
+
+    resetGame();
+
+    gameWrap.scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+  }
+);
+
+gradeBtn.addEventListener(
+  "click",
+  ()=>{
+
+    window.location.href =
+      YOUTUBE_URL;
+  }
+);
+
+/* =========================
+   RESIZE
+========================= */
+
+window.addEventListener(
+  "resize",
+  ()=>{
+
+    resizeCanvas();
+
+    if(!running){
+      resetGame();
+    }
+  }
+);
+
+/* =========================
+   INIT
+========================= */
+
+resizeCanvas();
+resetGame();
+
+</script>
+
+</body>
+</html>
